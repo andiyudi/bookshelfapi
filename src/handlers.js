@@ -43,8 +43,8 @@ const addBookHandler = (request, h) => {
     const isSuccess = books.filter((book) => book.id === id).length > 0;
     if (isSuccess) {
         return h.response(successResponse({
-        message: 'Buku berhasil ditambahkan',
-        data: { bookId: id },
+            message: 'Buku berhasil ditambahkan',
+            data: { bookId: id },
         })).code(201);
     }
 
@@ -52,7 +52,30 @@ const addBookHandler = (request, h) => {
 };
 
 const getAllBooksHandler = (request, h) => {
-    const simplifiedBooks = books.map((book) => ({
+    const { name, reading, finished } = request.query;
+
+    let filteredBooks = [...books];
+
+    // Filter by name (case insensitive)
+    if (name) {
+        filteredBooks = filteredBooks.filter(
+            (book) => book.name.toLowerCase().includes(name.toLowerCase()),
+        );
+    }
+
+    // Filter by reading status
+    if (reading !== undefined) {
+        const isReading = reading === '1';
+        filteredBooks = filteredBooks.filter((book) => book.reading === isReading);
+    }
+
+    // Filter by finished status
+    if (finished !== undefined) {
+        const isFinished = finished === '1';
+        filteredBooks = filteredBooks.filter((book) => book.finished === isFinished);
+    }
+
+    const simplifiedBooks = filteredBooks.map((book) => ({
         id: book.id,
         name: book.name,
         publisher: book.publisher,
@@ -83,7 +106,7 @@ const editBookByIdHandler = (request, h) => {
     } = request.payload;
     const updatedAt = new Date().toISOString();
 
-  // Validation: Name is required
+    // Validation: Name is required
     if (!name) {
         return h.response(failResponse('Gagal memperbarui buku. Mohon isi nama buku')).code(400);
     }
@@ -101,7 +124,7 @@ const editBookByIdHandler = (request, h) => {
     const finished = pageCount === readPage;
 
     books[index] = {
-    ...books[index],
+        ...books[index],
         name,
         year,
         author,

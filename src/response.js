@@ -1,16 +1,16 @@
 const successResponse = (data) => ({
     status: 'success',
     ...data,
-    });
-    
-    const failResponse = (message) => ({
+});
+
+const failResponse = (message) => ({
     status: 'fail',
     message,
-    });
-    
-    const errorResponse = (message) => ({
+});
+
+const errorResponse = (message) => ({
     status: 'error',
     message,
-    });
-    
-    module.exports = { successResponse, failResponse, errorResponse };
+});
+
+module.exports = { successResponse, failResponse, errorResponse };

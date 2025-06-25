@@ -6,9 +6,9 @@ const init = async () => {
         port: 9000,
         host: 'localhost',
         routes: {
-        cors: {
-            origin: ['*'],
-        },
+            cors: {
+                origin: ['*'],
+            },
         },
     });
 
